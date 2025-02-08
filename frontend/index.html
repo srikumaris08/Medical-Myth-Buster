@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medical Myth Buster Chatbot</title>
+    <style>
+        :root {
+            --bg-color: #c8d6d6;
+            --chatbox-bg: white;
+            --user-bg: #9199a1;
+            --user-text: white;
+            --bot-bg: #e0e0e0;
+            --bot-text: rgb(40, 40, 40);
+            --button-bg: #007bff;
+            --button-text: white;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: var(--bg-color);
+            text-align: center;
+        }
+
+        
+        .message {
+            text-align: left;
+            margin: 5px 0;
+            padding: 8px;
+            border-radius: 5px;
+        
+        }
+
+        .user {
+            background: var(--user-bg);
+            color: var(--user-text);
+            text-align: right;
+        }
+
+        .bot {
+            background: var(--bot-bg);
+            color: var(--bot-text);
+        }
+        #inputBox {
+            width: 80%;
+            padding: 8px;
+            margin-top: 10px;
+        }
+        
+
+        #sendButton {
+            padding: 8px 15px;
+            background: var(--button-bg);
+            color: var(--button-text);
+            border: none;
+            cursor: pointer;
+        }
+
+        #charCount {
+            font-size: 12px;
+            color: gray;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Medical Myth Buster Chatbot</h1>
+    
+    <input type="text" id="inputBox" placeholder="Ask your query" maxlength="100">
+    <div id="charCount">100 characters left</div>
+    <button id="sendButton">Send</button>
+
+    <script>
+        
+        const inputBox = document.getElementById("inputBox");
+        const sendButton = document.getElementById("sendButton");
+        const charCount = document.getElementById("charCount");
+        const maxChars = 100;
+
+        inputBox.addEventListener("input", () => {
+            let remaining = maxChars - inputBox.value.length;
+            charCount.innerText = remaining + " characters left";
+        });
+
+        sendButton.onclick = async function() {
+            let userMessage = inputBox.value.trim();
+            if (userMessage === "") return;
+
+            addMessage(userMessage, "user");
+            inputBox.value = ""; 
+
+            let botResponse = await getBotResponse(userMessage);
+            addMessage(botResponse, "bot");
+        };
+
+        function addMessage(text, sender) {
+            let message = document.createElement("div"); 
+            message.className = "message " + sender;  
+            message.innerText = text;  
+            chatbox.appendChild(message);  
+            chatbox.scrollTop = chatbox.scrollHeight;  
+        }
+
+        async function getBotResponse(message) {
+            try {
+                const response = await fetch("http://127.0.0.1:5000/chat", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({ message: message })
+                });
+
+                if (!response.ok) {
+                    throw new Error("Server error");
+                }
+
+                const data = await response.json();
+                return data.response;
+            } catch (error) {
+                console.error("Error:", error);
+                return "Error: Unable to connect to the server.";
+            }
+        }
+    </script>
+</body>
+</html>

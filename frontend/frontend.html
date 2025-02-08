@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medical Myth Buster Chatbot</title>
+    <style>
+        :root {
+            --bg-color: #c8d6d6; /* Background color */
+            --chatbox-bg: white; /* Chatbox background */
+            --user-bg: #9199a1; /* User message background */
+            --user-text: white; /* User text color */
+            --bot-bg: #e0e0e0; /* Bot message background */
+            --bot-text: rgb(40, 40, 40); /* Bot text color */
+            --button-bg: #007bff; /* Send button color */
+            --button-text: white; /* Send button text color */
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: var(--bg-color);
+            text-align: center;
+        }
+
+        #chatbox {
+            width: 400px;
+            margin: 20px auto;
+            background: var(--chatbox-bg);
+            border-radius: 8px;
+            padding: 10px;
+            box-shadow: 2px 2px 10px gray;
+            height: 300px;
+            overflow-y: auto;
+        }
+
+        .message {
+            text-align: left;
+            margin: 5px 0;
+            padding: 8px;
+            border-radius: 5px;
+        }
+
+        .user {
+            background: var(--user-bg);
+            color: var(--user-text);
+            text-align: right;
+        }
+
+        .bot {
+            background: var(--bot-bg);
+            color: var(--bot-text);
+        }
+
+        #inputBox {
+            width: 80%;
+            padding: 8px;
+            margin-top: 10px;
+        }
+
+        #sendButton {
+            padding: 8px 15px;
+            background: var(--button-bg);
+            color: var(--button-text);
+            border: none;
+            cursor: pointer;
+        }
+
+        #charCount {
+            font-size: 12px;
+            color: gray;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Medical Myth Buster Chatbot</h1>
+
+    <div id="chatbox"></div> <!-- Added missing chatbox div -->
+
+    <input type="text" id="inputBox" placeholder="Ask your query" maxlength="100">
+    <div id="charCount">100 characters left</div>
+    <button id="sendButton">Send</button>
+
+    <script>
+        const inputBox = document.getElementById("inputBox");
+        const charCount = document.getElementById("charCount");
+        const chatbox = document.getElementById("chatbox");
+        const sendButton = document.getElementById("sendButton");
+
+        const maxChars = 100;
+
+        inputBox.addEventListener("input", () => {
+            let remaining = maxChars - inputBox.value.length;
+            charCount.innerText = remaining + " characters left";
+        });
+
+        sendButton.onclick = async function() {
+            let userMessage = inputBox.value.trim();
+            if (userMessage === "") return;
+
+            addMessage(userMessage, "user");
+            inputBox.value = "";
+
+            let botResponse = await getBotResponse(userMessage);
+            addMessage(botResponse, "bot");
+        };
+
+        function addMessage(text, sender) {
+            let message = document.createElement("div");
+            message.className = "message " + sender;  
+            message.innerText = text;  
+            chatbox.appendChild(message);  
+            chatbox.scrollTop = chatbox.scrollHeight;  
+        }
+
+        async function getBotResponse(message) {
+            try {
+                const response = await fetch("http://127.0.0.1:8000/chat", {  // Connect to FastAPI backend
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({ message: message })
+                });
+
+                const data = await response.json();
+                return data.response || "Sorry, I couldn't process that.";
+            } catch (error) {
+                console.error("Error:", error);
+                return "Error connecting to chatbot.";
+            }
+        }
+    </script>
+</body>
+</html>
