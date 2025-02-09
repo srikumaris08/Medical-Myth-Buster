@@ -27,6 +27,10 @@ Solution:We propose an AI-powered chatbot, "Medical Myth Buster," that verifies 
 For Software:
 PYTHON HTML CSS JAVASCRIPT
 
+SCREENSHOT
+![Screenshot (73)](https://github.com/user-attachments/assets/caa1f499-ea27-4107-aba5-b774a54d6a61)
+
+
 
 
 
