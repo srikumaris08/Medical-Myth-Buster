@@ -25,7 +25,7 @@ app.add_middleware(
 )
 
 GROQ_API_KEY = os.getenv("GROQ_API_KEY")
-
+print(GROQ_API_KEY)
 # Define request body model
 class ChatRequest(BaseModel):
     message: str

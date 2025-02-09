@@ -6,21 +6,23 @@
     <title>Medical Myth Buster Chatbot</title>
     <style>
         :root {
-            --bg-color: #c8d6d6; /* Background color */
-            --chatbox-bg: white; /* Chatbox background */
-            --user-bg: #9199a1; /* User message background */
-            --user-text: white; /* User text color */
-            --bot-bg: #e0e0e0; /* Bot message background */
+            --bg-color: #35479d; /* Background color */
+            --chatbox-bg: #8fa1a9; /* Chatbox background */
+            --user-bg: hsl(66, 88%, 77%); /* User message background */
+            --user-text: rgb(0, 0, 0); /* User text color */
+            --bot-bg: #efc37c; /* Bot message background */
             --bot-text: rgb(40, 40, 40); /* Bot text color */
-            --button-bg: #007bff; /* Send button color */
+            --button-bg: #07c436; /* Send button color */
             --button-text: white; /* Send button text color */
         }
 
         body {
-            font-family: Arial, sans-serif;
+            font-family: Times,monospace;
             background: var(--bg-color);
             text-align: center;
+            
         }
+        
 
         #chatbox {
             width: 400px;
@@ -28,7 +30,7 @@
             background: var(--chatbox-bg);
             border-radius: 8px;
             padding: 10px;
-            box-shadow: 2px 2px 10px gray;
+            box-shadow: 2px 2px 10px rgb(235, 238, 166);
             height: 300px;
             overflow-y: auto;
         }
@@ -73,9 +75,10 @@
     </style>
 </head>
 <body>
-    <h1>Medical Myth Buster Chatbot</h1>
+    <h1>MEDICAL MYTH BUSTER CHATBOAT</h1>
 
-    <div id="chatbox"></div> <!-- Added missing chatbox div -->
+    <div id="chatbox"></div>
+    
 
     <input type="text" id="inputBox" placeholder="Ask your query" maxlength="100">
     <div id="charCount">100 characters left</div>
